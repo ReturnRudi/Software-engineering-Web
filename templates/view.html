@@ -1,0 +1,77 @@
+<html>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{messages[-1]}}");
+        </script>
+    {% endif %}
+{% endwith %}
+
+<br>
+<br>
+<br>
+<script>
+    function follow_click(){
+        if(follow.value == "팔로우")
+        {
+            follow.value = "팔로잉";
+            follow.style.backgroundColor = 'rgb(205,92,92)';
+        }
+            else
+            {
+                follow.value = "팔로우";
+                follow.style.backgroundColor = 'rgb(0, 102, 255)';
+            }
+    }
+    window.onload = function(){
+        if(onsale.value == "판매완료")
+        {
+            onsale.style.backgroundColor = 'rgb(205,92,92)';
+        }
+    }
+</script>
+<input id = "onsale" type = "button" 
+style = "margin-left: 79%;color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="{{result.onsaledisplay}}">
+<br>
+<br>
+{% if session["id2"] != result.writer_id %}
+<form name = "form" method = "POST" action = "/follow" onsubmit = "follow_click()">
+<input id = "follow" type = "submit"
+style = "margin-left: 15%;color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="팔로우">
+<input id = "dest" name = "dest" type = "hidden" value = {{result.name}}>
+<input id = "follower" name = "follower" type = "hidden" value = "{{session['name']}}">
+</form>
+{% endif %}
+<br>
+<br>
+
+
+
+<table style  = "margin-left : auto; margin-right : auto; width : 70%; border-spacing : 10px; border-collapse : collapse;">
+<tr style = "height : 30px; background-color : rgb(204, 203, 203);  border-bottom : 1px solid; border-top : 1px solid;">
+    <td style = "width : 60%;"><b>&nbsp;{{result.title}}</b></td>
+    <td style = "width : 20%; text-align : right;"><a>&nbsp;</a>{{result.name}}</td>
+    <td style = "width : 20%; text-align : right;">{{result.pubdate|formatdatetime}}<a>&nbsp;&nbsp;</a></td>
+</tr>
+<tr>
+    <td colspan = "3" 
+    style = "width : 100%; height : 200px; vertical-align : top; border-collapse : collapse;">&nbsp{% autoescape false %}{{result.contents}}{% endautoescape %}</td>
+</tr>
+</table>
+
+<br>
+
+<a style = "margin-left : 79.5%;" href="{{url_for('lists', page=page, search=search, keyword=keyword)}}"><input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="메인으로"></a>
+<br>
+<div style = "margin-left : 76%;">
+<br>
+{% if session["id2"] == result.writer_id %}
+<button style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" 
+type = "button" onclick = "location.href = '{{url_for('board_delete', idx=result.id)}}'">글삭제</button>
+<button style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" 
+type = "button" onclick = "location.href = '{{url_for('board_edit', idx=result.id)}}'">글수정</button>
+{% endif %}
+
+</div>
+</html>
+

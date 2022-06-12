@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous" type = "text/javascript"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<script>
+    $(document).ready(function (){
+        var setting = {
+            height : 400
+        };
+
+        $("#summernote").summernote(setting);
+    })
+</script>
+<script>
+    function checkForm(){
+        if($.trim($("#title").val()) == NULL){
+            alert("제목을 입력하세요.");
+            $("#title").focus();
+            return false;
+        }
+        if($.trim($("#summernote").val()) == NULL){
+            alert("내용을 입력하세요.");
+            $("#summernote").focus();
+            return false;
+        }
+    }
+</script>
+<html>
+    <head>
+        <style>
+            html{
+                font-family : Verdana, Geneva, Tahoma, sans-serif;
+                /*폰트는 나중에 적당한 거 찾아서*/
+            }
+            table{
+                margin-left : auto;
+                margin-right : auto;
+                width : 70%;
+                border-spacing : 10px;
+            }
+            textarea{
+                width : 1000px;
+                height : 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <form name = "form" method = "POST" action = "/edit/{{data._id}}" onsubmit="return checkForm()">
+            <tr>
+                <td><b>작성자</b></td>
+                <td colspan = "2"><b>판매상태: </b><input type = "text" style = "width : 100px; height : 30px;" value = {{data.onsaledisplay}} name = "onsaledisplay" id = "onsaledisplay"></td>
+            </tr>
+            <tr>
+                <td colspan = "2"><input type = "text" style = "width : 40%; height : 30px;" name = "name" value = "{{session['name']}}" readonly></td>
+            </tr>
+            <tr>
+                <td colspan = "2"><b>제목</b></td>
+            </tr>
+            <tr>
+                <td colspan = "2"><input type = "text" style = "width : 1000px; height : 30px;" name = "title" value ={{data.title}}></td>
+            </tr>
+            <tr>
+                <td colspan = "2"><b>내용</b></td>
+            </tr>
+            <tr>
+                <td colspan = "2"><textarea name =  "contents" id = "summernote">{{data.contents}}</textarea></td>
+            </tr>
+            <tr>
+                <td colspan = "2"><input type = "submit" style = "margin-left : 96%; color : white; border : 0; border-radius: 5px; background-color : rgb(0, 221, 255);" value = "수정"></td>
+            </tr>
+            </form>
+        </table>
+    </body>
+</html>

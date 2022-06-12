@@ -1,0 +1,53 @@
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{messages[-1]}}");
+        </script>
+    {% endif %}
+{% endwith %}
+
+<table style = "margin-left : auto; margin-right : auto; width : 40%; border-spacing : 10px;">
+    <form name="form" action="/join" method="POST">
+        <thead>
+            <caption><h1><b>회원가입</b></h1></caption>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan = "2">아이디</td>
+            </tr>
+            <tr>
+                <td colspan = "2" style = "text-align : center;"><input type="text" style = "width : 100%; height : 30px;" name="id"></td>
+            </tr>
+            <tr>
+                <td colspan = "2">비밀번호</td>
+            </tr>
+            <tr>
+                <td colspan = "2" style = "text-align : center;"><input type="password" style = "width : 100%; height : 30px;" name="pass1"></td>
+            </tr>
+            <tr>
+                <td colspan = "2">비밀번호 확인</td>
+            </tr>
+            <tr>
+                <td colspan = "2" style = "text-align : center;"><input type="password" style = "width : 100%; height : 30px;" name="pass2"></td>
+            </tr>
+            <tr>
+                <td>닉네임</td>
+            </tr>
+            <tr>
+                <td colspan = "2" style = "text-align : center;"><input type="text" style = "width : 100%; height : 30px;" name="name"></td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr style = "text-align : center;">
+                <td><input type="submit" value="가입하기" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 221, 255);"></td>
+            </tr>
+            <tr style = "text-align : center;">
+                <td><a href="{{url_for('lists')}}"><input type="button" value="메인으로" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);"></a></td>
+            </tr>
+        </tbody>
+    </form>
+</table>
+
+</html>

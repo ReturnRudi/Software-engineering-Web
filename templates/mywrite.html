@@ -1,0 +1,75 @@
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{messages[-1]}}");
+        </script>
+    {% endif %}
+{% endwith %}
+
+
+<div style = "text-align : center;"><h1>{{session["name"]}}의 페이지</h1></div>
+
+<h3 style = "margin-left : 10%; text-align : left">나의 글</h3>
+
+
+<script>
+    function display(){
+        list_show.style.visibility = "visible";
+    }
+    
+    function nodis(){
+        list_show.style.visibility = "hidden";
+    }
+</script>
+
+<div id = "list_show">
+    {% if datas|length > 0 %}
+    <table style = "margin-left : auto; margin-right : auto; width : 80%; height : 30px; border-collapse : collapse;" >
+        <thead style = "border : 1px solid; background-color : rgb(204, 203, 203); border-collapse : collapse;">
+            <tr>
+                <td style = "text-align : center; width : 50px; height : 30px;"><b>번호</b></td>
+                <td><b>제목</b></td>
+                <td style = "text-align : center; width : 100px; height : 30px;"><b>작성자</b></td>
+                <td style = "text-align : center; width : 150px; height : 30px;"><b>날짜</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in datas %}
+            <tr style = "border-bottom : 1px solid;">
+                <td style = "text-align : center; width : 40px">{{loop.index + ((page - 1) * limit)}}</td>
+                <td><a href = "{{url_for('board_view', idx=data._id, page=page, search = search, keyword = keyword)}}">{{data.title}}</a></td>
+                <td style = "text-align : center; width : 100px;">{{data.name}}</td>
+                <td style = "text-align : center; width : 150px;">{{data.pubdate|formatdatetime}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <div style = "text-align : center;">
+    {% if block_start - 1 > 0%}
+        <a href="{{url_for('lists_mywrite', page=block_start - 1, search = search, keyword = keyword)}}">[이전]</a>
+    {% endif%}
+
+    {% for i in range(block_start, block_last + 1) %}
+        {% if i <= last_page_num %}
+            {% if i == page %}
+                <b>{{ i }}</b>
+            {% else %}
+                <a href = "{{url_for('lists_mywrite', page=i, search = search, keyword = keyword)}}">{{ i }}</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% if block_last < last_page_num %}
+        <a href="{{url_for('lists_mywrite', page=block_last + 1, search = search, keyword = keyword)}}">[다음]</a>
+    {% endif%}
+    </div>
+</div>
+
+<a style = "margin-left : 85%;" href="{{url_for('lists')}}"><input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="메인으로"></a>
+</div>
+
+{% else %}
+<h3 style = "margin-left : 10%">데이터가 없습니다.</h3>
+<a style = "margin-left : 85%;" href="{{url_for('lists')}}"><input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="메인으로"></a>
+{% endif %}

@@ -1,0 +1,98 @@
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{messages[-1]}}");
+        </script>
+    {% endif %}
+{% endwith %}
+
+{% if session.get("id2") is not none %}
+        <button style = "margin-left : 85%; color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" type = "button" onclick = "location.href = '{{url_for('member_logout')}}'">로그아웃</button>
+{% endif %}
+
+<div style = "text-align : center;"><h1>중고거래 사이트</h1></div>
+
+{% if session["id2"] == NULL %}
+<a style = "margin-left : 85%;" href="{{url_for('member_login')}}"><input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="로그인"></a>
+{% else %}
+<div style = "text-align : center;">로그인 정보: {{session["name"]}}</div>
+<a style = "margin-left : 84%;" href="{{url_for('lists_mypage')}}"><input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="마이페이지"></a>
+{% endif %}
+
+<script>
+    function search(){
+        var v_search = document.getElementById("search").value;
+        var v_keyword = document.getElementById("keyword").value;
+
+        if(v_search == "" || v_keyword == ""){
+            return false;
+        }
+        else
+        {
+            self.location.href = "{{url_for('lists')}}?search=" + v_search + "&keyword=" + v_keyword;
+        }
+    }
+</script>
+
+<br><br>
+
+
+{% if datas|length > 0 %}
+<table style = "margin-left : auto; margin-right : auto; width : 80%; height : 30px; border-collapse : collapse;" >
+    <thead style = "border : 1px solid; background-color : rgb(204, 203, 203); border-collapse : collapse;">
+        <tr>
+            <td style = "text-align : center; width : 50px; height : 30px;"><b>번호</b></td>
+            <td><b>제목</b></td>
+            <td style = "text-align : center; width : 100px; height : 30px;"><b>작성자</b></td>
+            <td style = "text-align : center; width : 150px; height : 30px;"><b>날짜</b></td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in datas %}
+        <tr style = "border-bottom : 1px solid;">
+            <td style = "text-align : center; width : 40px">{{loop.index + ((page - 1) * limit)}}</td>
+            <td><a href = "{{url_for('board_view', idx=data._id, page=page, search = search, keyword = keyword)}}">{{data.title}}</a></td>
+            <td style = "text-align : center; width : 100px;">{{data.name}}</td>
+            <td style = "text-align : center; width : 150px;">{{data.pubdate|formatdatetime}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+<div style = "text-align : center;">
+{% if block_start - 1 > 0%}
+    <a href="{{url_for('lists', page=block_start - 1, search = search, keyword = keyword)}}">[이전]</a>
+{% endif%}
+
+
+{% for i in range(block_start, block_last + 1) %}
+    {% if i <= last_page_num %}
+        {% if i == page %}
+            <b>{{ i }}</b>
+        {% else %}
+            <a href = "{{url_for('lists', page=i, search = search, keyword = keyword)}}">{{ i }}</a>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+{% if block_last < last_page_num %}
+    <a href="{{url_for('lists', page=block_last + 1, search = search, keyword = keyword)}}">[다음]</a>
+{% endif%}
+</div>
+
+<br>
+<div style = "text-align : center;">
+<select name = "search" id="search">
+    <option value="" {% if search == '' or search == -1 %} selected {% endif %}>검색대상</option>
+    <option value="0" {% if search == 0 %} selected {% endif %}>키워드</option>
+</select>
+<input type="text" name="keyword" id="keyword" {% if keyword != "" %} value={{keyword}} {% endif %}>
+<input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="검색" onclick="search()">
+</div>
+
+{% else %}
+<h3>데이터가 없습니다.</h3>
+{% endif %}
+
+<br>
+<a style = "margin-left : 85%;" href="{{url_for('board_write')}}"><input type="button" style = "color : white; border : 0; border-radius: 5px; background-color : rgb(0, 102, 255);" value="글작성"></a>
